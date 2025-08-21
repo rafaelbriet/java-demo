@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/veiculos") // Base path for all vehicle-related endpoints
@@ -19,6 +20,13 @@ public class VehiclesController {
 
     public VehiclesController(VehicleService service) {
         this.service = service;
+    }
+
+    // GET the count of unsold vehicles
+    @GetMapping("/total-nao-vendidos")
+    public ResponseEntity<Map<String, Long>> getUnsoldVehicleCount() {
+        long unsoldCount = service.countBySoldStatus(false);
+        return ResponseEntity.ok(Collections.singletonMap("unsoldCount", unsoldCount));
     }
 
     // GET all vehicles or filter by brand, model, year

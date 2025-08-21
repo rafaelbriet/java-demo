@@ -94,4 +94,9 @@ public class VehicleService {
         }
         return false;
     }
+
+    @Transactional(readOnly = true)
+    public long countBySoldStatus(boolean sold) {
+        return repository.countBySold(sold);
+    }
 }
