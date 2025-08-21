@@ -10,6 +10,7 @@ import br.com.rafaelbriet.springapidemo.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap; // For preserving order
 import java.util.List;
 import java.util.Map;
@@ -126,5 +127,14 @@ public class VehicleService {
                         (v1, v2) -> v1,
                         LinkedHashMap::new
                 ));
+    }
+
+    @Transactional(readOnly = true)
+    public List<VehicleResponseDTO> findVehiclesRegisteredLastWeek() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
+        List<Vehicle> vehicles = repository.findByCreatedAfter(oneWeekAgo);
+        return vehicles.stream()
+                .map(mapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 }

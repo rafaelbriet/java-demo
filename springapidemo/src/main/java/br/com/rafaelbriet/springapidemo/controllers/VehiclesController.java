@@ -43,6 +43,13 @@ public class VehiclesController {
         return ResponseEntity.ok(distribution);
     }
 
+    // GET recently created vehicles (last week)
+    @GetMapping("/recentes")
+    public ResponseEntity<List<VehicleResponseDTO>> getRecentlyRegisteredVehicles() {
+        List<VehicleResponseDTO> vehicles = service.findVehiclesRegisteredLastWeek();
+        return ResponseEntity.ok(vehicles);
+    }
+
     // GET all vehicles or filter by brand, model, year
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles(

@@ -21,4 +21,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
 
     @Query("SELECT new br.com.rafaelbriet.springapidemo.dtos.BrandCount(v.brand, COUNT(v)) FROM Vehicle v GROUP BY v.brand ORDER BY v.brand")
     List<BrandCount> findVehicleCountByBrand();
+
+    List<Vehicle> findByCreatedAfter(java.time.LocalDateTime date);
 }
