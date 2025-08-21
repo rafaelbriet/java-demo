@@ -10,11 +10,13 @@ import br.com.rafaelbriet.springapidemo.exceptions.InvalidBrandException;
 import br.com.rafaelbriet.springapidemo.mappers.VehicleMapper;
 import br.com.rafaelbriet.springapidemo.repositories.BrandRepository;
 import br.com.rafaelbriet.springapidemo.repositories.VehicleRepository;
+import br.com.rafaelbriet.springapidemo.specifications.VehicleSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap; // For preserving order
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,9 +42,12 @@ public class VehicleService {
     }
 
     @Transactional(readOnly = true)
-    public List<VehicleResponseDTO> findAll(String brand, String model, Integer year) {
-        // A lógica de filtro avançado será adicionada aqui posteriormente.
-        return vehicleRepository.findAll().stream()
+    public List<VehicleResponseDTO> findAll(String brand, Integer year, String color) {
+        Specification<Vehicle> spec = Specification.where(VehicleSpecification.brandEquals(brand))
+                .and(VehicleSpecification.yearEquals(year))
+                .and(VehicleSpecification.colorEquals(color));
+
+        return vehicleRepository.findAll(spec).stream()
                 .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -72,6 +77,7 @@ public class VehicleService {
                     existingVehicle.setModel(requestDTO.getModel());
                     existingVehicle.setBrand(requestDTO.getBrand());
                     existingVehicle.setYear(requestDTO.getYear());
+                    existingVehicle.setColor(requestDTO.getColor());
                     existingVehicle.setDescription(requestDTO.getDescription());
                     existingVehicle.setSold(requestDTO.isSold());
                     Vehicle updatedVehicle = vehicleRepository.save(existingVehicle);
@@ -94,6 +100,9 @@ public class VehicleService {
                                 break;
                             case "year":
                                 existingVehicle.setYear(((Number) value).intValue());
+                                break;
+                            case "color":
+                                existingVehicle.setColor((String) value);
                                 break;
                             case "description":
                                 existingVehicle.setDescription((String) value);
@@ -125,12 +134,11 @@ public class VehicleService {
     @Transactional(readOnly = true)
     public Map<String, Long> getVehicleCountByDecade() {
         List<DecadeCount> counts = vehicleRepository.findVehicleCountByDecade();
-        // Using LinkedHashMap to preserve the order returned by the query
         return counts.stream()
                 .collect(Collectors.toMap(
                         decadeCount -> "Decade " + decadeCount.getDecade(),
                         DecadeCount::getCount,
-                        (v1, v2) -> v1, // Merge function, not really needed here
+                        (v1, v2) -> v1,
                         LinkedHashMap::new
                 ));
     }

@@ -16,6 +16,8 @@ public class VehicleRequestDTO {
     @Min(value = 1886, message = "Year must be after 1886") // First car was invented in 1886
     private Integer year;
 
+    private String color;
+
     private String description;
 
     private boolean sold;
@@ -43,6 +45,14 @@ public class VehicleRequestDTO {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getDescription() {

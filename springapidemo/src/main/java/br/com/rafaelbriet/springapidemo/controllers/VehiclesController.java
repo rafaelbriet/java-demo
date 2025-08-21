@@ -53,10 +53,10 @@ public class VehiclesController {
     // GET all vehicles or filter by brand, model, year
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles(
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String model,
-            @RequestParam(required = false) Integer year) {
-        List<VehicleResponseDTO> vehicles = service.findAll(brand, model, year);
+            @RequestParam(required = false, name = "marca") String brand,
+            @RequestParam(required = false, name = "ano") Integer year,
+            @RequestParam(required = false, name = "cor") String color) {
+        List<VehicleResponseDTO> vehicles = service.findAll(brand, year, color);
         return ResponseEntity.ok(vehicles);
     }
 

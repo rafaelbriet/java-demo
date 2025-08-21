@@ -13,6 +13,7 @@ public class VehicleMapper {
         vehicle.setModel(dto.getModel());
         vehicle.setBrand(dto.getBrand());
         vehicle.setYear(dto.getYear());
+        vehicle.setColor(dto.getColor());
         vehicle.setDescription(dto.getDescription());
         vehicle.setSold(dto.isSold());
         return vehicle;
@@ -24,6 +25,7 @@ public class VehicleMapper {
         dto.setModel(entity.getModel());
         dto.setBrand(entity.getBrand());
         dto.setYear(entity.getYear());
+        dto.setColor(entity.getColor());
         dto.setDescription(entity.getDescription());
         dto.setSold(entity.isSold());
         dto.setCreated(entity.getCreated());

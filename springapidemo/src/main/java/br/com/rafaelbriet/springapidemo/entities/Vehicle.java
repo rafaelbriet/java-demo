@@ -26,6 +26,9 @@ public class Vehicle {
     @Column(name = "ano")
     private int year;
 
+    @Column(name = "cor")
+    private String color;
+
     @Column(name = "descricao")
     private String description;
 
@@ -45,11 +48,12 @@ public class Vehicle {
         // Default constructor for JPA
     }
 
-    public Vehicle(Long id, String model, String brand, int year, String description, boolean sold, LocalDateTime created, LocalDateTime updated) {
+    public Vehicle(Long id, String model, String brand, int year, String color, String description, boolean sold, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
         this.model = model;
         this.brand = brand;
         this.year = year;
+        this.color = color;
         this.description = description;
         this.sold = sold;
         this.created = created;
@@ -71,6 +75,10 @@ public class Vehicle {
 
     public int getYear() {
         return year;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public String getDescription() {
@@ -104,6 +112,10 @@ public class Vehicle {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public void setDescription(String description) {

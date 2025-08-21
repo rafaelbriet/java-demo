@@ -8,6 +8,7 @@ public class VehicleResponseDTO {
     private String model;
     private String brand;
     private int year;
+    private String color;
     private String description;
     private boolean sold;
     private LocalDateTime created;
@@ -44,6 +45,14 @@ public class VehicleResponseDTO {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getDescription() {
