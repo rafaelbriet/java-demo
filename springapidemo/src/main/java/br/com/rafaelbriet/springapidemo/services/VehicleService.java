@@ -5,10 +5,13 @@ import br.com.rafaelbriet.springapidemo.dtos.DecadeCount;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleRequestDTO;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleResponseDTO;
 import br.com.rafaelbriet.springapidemo.entities.Brand;
+import br.com.rafaelbriet.springapidemo.entities.Color;
 import br.com.rafaelbriet.springapidemo.entities.Vehicle;
 import br.com.rafaelbriet.springapidemo.exceptions.InvalidBrandException;
+import br.com.rafaelbriet.springapidemo.exceptions.InvalidColorException;
 import br.com.rafaelbriet.springapidemo.mappers.VehicleMapper;
 import br.com.rafaelbriet.springapidemo.repositories.BrandRepository;
+import br.com.rafaelbriet.springapidemo.repositories.ColorRepository;
 import br.com.rafaelbriet.springapidemo.repositories.VehicleRepository;
 import br.com.rafaelbriet.springapidemo.specifications.VehicleSpecification;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,11 +30,13 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
     private final BrandRepository brandRepository;
+    private final ColorRepository colorRepository;
     private final VehicleMapper mapper;
 
-    public VehicleService(VehicleRepository vehicleRepository, BrandRepository brandRepository, VehicleMapper mapper) {
+    public VehicleService(VehicleRepository vehicleRepository, BrandRepository brandRepository, ColorRepository colorRepository, VehicleMapper mapper) {
         this.vehicleRepository = vehicleRepository;
         this.brandRepository = brandRepository;
+        this.colorRepository = colorRepository;
         this.mapper = mapper;
     }
 
@@ -39,6 +44,12 @@ public class VehicleService {
         return brandRepository.findByNameIgnoreCase(brandName)
                 .map(Brand::getName)
                 .orElseThrow(() -> new InvalidBrandException("Invalid brand: '" + brandName + "'. Please use a valid brand."));
+    }
+
+    private String validateAndGetOfficialColorName(String colorName) {
+        return colorRepository.findByNameIgnoreCase(colorName)
+                .map(Color::getName)
+                .orElseThrow(() -> new InvalidColorException("Invalid color: '" + colorName + "'. Please use a valid color."));
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +71,10 @@ public class VehicleService {
     @Transactional
     public VehicleResponseDTO create(VehicleRequestDTO requestDTO) {
         String officialBrandName = validateAndGetOfficialBrandName(requestDTO.getBrand());
-        requestDTO.setBrand(officialBrandName); // Set the official name before mapping
+        requestDTO.setBrand(officialBrandName);
+
+        String officialColorName = validateAndGetOfficialColorName(requestDTO.getColor());
+        requestDTO.setColor(officialColorName);
 
         Vehicle vehicle = mapper.toEntity(requestDTO);
         Vehicle savedVehicle = vehicleRepository.save(vehicle);
@@ -70,7 +84,10 @@ public class VehicleService {
     @Transactional
     public Optional<VehicleResponseDTO> update(Long id, VehicleRequestDTO requestDTO) {
         String officialBrandName = validateAndGetOfficialBrandName(requestDTO.getBrand());
-        requestDTO.setBrand(officialBrandName); // Set the official name before updating
+        requestDTO.setBrand(officialBrandName);
+
+        String officialColorName = validateAndGetOfficialColorName(requestDTO.getColor());
+        requestDTO.setColor(officialColorName);
 
         return vehicleRepository.findById(id)
                 .map(existingVehicle -> {
@@ -102,7 +119,8 @@ public class VehicleService {
                                 existingVehicle.setYear(((Number) value).intValue());
                                 break;
                             case "color":
-                                existingVehicle.setColor((String) value);
+                                String officialColorName = validateAndGetOfficialColorName((String) value);
+                                existingVehicle.setColor(officialColorName);
                                 break;
                             case "description":
                                 existingVehicle.setDescription((String) value);
