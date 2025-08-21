@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: '/veiculos', // The proxy will handle this
 });
 
-export const getVehicles = (params: { brand?: string; year?: number; color?: string }) => {
+export const getVehicles = (params: { marca?: string; ano?: number; cor?: string }) => {
   return api.get<Vehicle[]>('', { params });
 };
 

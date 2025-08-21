@@ -7,10 +7,30 @@ import Statistics from './components/Statistics';
 
 function App() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [filters, setFilters] = useState<{ brand?: string; year?: number; color?: string }>({});
+  const [filters, setFilters] = useState<{ marca?: string; ano?: number; cor?: string }>({});
 
+  // Effect to read filters from URL on initial load
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const initialFilters: { marca?: string; ano?: number; cor?: string } = {};
+    if (params.has('marca')) initialFilters.marca = params.get('marca') || undefined;
+    if (params.has('ano')) initialFilters.ano = parseInt(params.get('ano') || '') || undefined;
+    if (params.has('cor')) initialFilters.cor = params.get('cor') || undefined;
+    setFilters(initialFilters);
+  }, []); // Run only once on mount
+
+  // Effect to fetch vehicles when filters change (including initial load from URL)
   useEffect(() => {
     fetchVehicles();
+    // Update URL when filters change
+    const newParams = new URLSearchParams();
+    if (filters.marca) newParams.set('marca', filters.marca);
+    if (filters.ano) newParams.set('ano', filters.ano.toString());
+    if (filters.cor) newParams.set('cor', filters.cor);
+
+    const queryString = newParams.toString();
+    const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
   }, [filters]);
 
   const fetchVehicles = async () => {
@@ -22,7 +42,7 @@ function App() {
     }
   };
 
-  const handleFilterChange = (newFilters: { brand?: string; year?: number; color?: string }) => {
+  const handleFilterChange = (newFilters: { marca?: string; ano?: number; cor?: string }) => {
     setFilters(newFilters);
   };
 
@@ -32,7 +52,7 @@ function App() {
       
       <div className="row">
         <div className="col-md-8">
-          <Filters onFilterChange={handleFilterChange} />
+          <Filters onFilterChange={handleFilterChange} currentFilters={filters} /> {/* Pass currentFilters to Filters */}
           <VehicleList vehicles={vehicles} />
         </div>
         <div className="col-md-4">

@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface FiltersProps {
-  onFilterChange: (filters: { brand?: string; year?: number; color?: string }) => void;
+  onFilterChange: (filters: { marca?: string; ano?: number; cor?: string }) => void;
+  currentFilters: { marca?: string; ano?: number; cor?: string }; // New prop
 }
 
-const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
-  const [brand, setBrand] = useState<string>('');
-  const [year, setYear] = useState<string>('');
-  const [color, setColor] = useState<string>('');
+const Filters: React.FC<FiltersProps> = ({ onFilterChange, currentFilters }) => { // Destructure new prop
+  const [brand, setBrand] = useState<string>(currentFilters.marca || ''); // Initialize from prop
+  const [year, setYear] = useState<string>(currentFilters.ano?.toString() || ''); // Initialize from prop
+  const [color, setColor] = useState<string>(currentFilters.cor || ''); // Initialize from prop
+
+  // Effect to update internal state when currentFilters prop changes (e.g., from URL)
+  useEffect(() => {
+    setBrand(currentFilters.marca || '');
+    setYear(currentFilters.ano?.toString() || '');
+    setColor(currentFilters.cor || '');
+  }, [currentFilters]);
 
   const handleApplyFilters = () => {
     onFilterChange({
-      brand: brand || undefined,
-      year: year ? parseInt(year) : undefined,
-      color: color || undefined,
+      marca: brand || undefined,
+      ano: year ? parseInt(year) : undefined,
+      cor: color || undefined,
     });
   };
 
