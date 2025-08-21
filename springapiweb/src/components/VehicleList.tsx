@@ -4,9 +4,11 @@ import VehicleCard from './VehicleCard';
 
 interface VehicleListProps {
   vehicles: Vehicle[];
+  onEdit: (vehicle: Vehicle) => void;
+  onDelete: (id: number) => void;
 }
 
-const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
+const VehicleList: React.FC<VehicleListProps> = ({ vehicles, onEdit, onDelete }) => {
   return (
     <div className="row">
       {vehicles.length === 0 ? (
@@ -14,7 +16,7 @@ const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
       ) : (
         vehicles.map(vehicle => (
           <div key={vehicle.id} className="col-md-6 mb-4">
-            <VehicleCard vehicle={vehicle} />
+            <VehicleCard vehicle={vehicle} onEdit={onEdit} onDelete={onDelete} />
           </div>
         ))
       )}

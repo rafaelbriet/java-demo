@@ -3,9 +3,11 @@ import type { Vehicle } from '../types';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
+  onEdit: (vehicle: Vehicle) => void;
+  onDelete: (id: number) => void;
 }
 
-const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
+const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, onEdit, onDelete }) => {
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -15,6 +17,10 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
           <li className="list-group-item">Cor: {vehicle.color}</li>
           <li className="list-group-item">Vendido: {vehicle.sold ? 'Sim' : 'Não'}</li>
         </ul>
+        <div className="mt-3">
+          <button className="btn btn-warning btn-sm me-2" onClick={() => onEdit(vehicle)}>Editar</button>
+          <button className="btn btn-danger btn-sm" onClick={() => onDelete(vehicle.id)}>Deletar</button>
+        </div>
       </div>
     </div>
   );

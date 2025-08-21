@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Vehicle } from '../types';
+import type { Vehicle, VehicleRequest } from '../types'; // Added VehicleRequest
 
 const api = axios.create({
   baseURL: '/veiculos', // The proxy will handle this
@@ -23,4 +23,16 @@ export const getVehicleDistributionByBrand = () => {
 
 export const getRecentlyRegisteredVehicles = () => {
   return api.get<Vehicle[]>('/recentes');
+};
+
+export const createVehicle = (vehicleData: VehicleRequest) => {
+  return api.post<Vehicle>('', vehicleData);
+};
+
+export const updateVehicle = (id: number, vehicleData: VehicleRequest) => {
+  return api.put<Vehicle>(`/${id}`, vehicleData);
+};
+
+export const deleteVehicle = (id: number) => {
+  return api.delete<void>(`/${id}`);
 };
