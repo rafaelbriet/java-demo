@@ -1,6 +1,9 @@
 package br.com.rafaelbriet.springapidemo.services;
 
+import br.com.rafaelbriet.springapidemo.dtos.VehicleRequestDTO;
+import br.com.rafaelbriet.springapidemo.dtos.VehicleResponseDTO;
 import br.com.rafaelbriet.springapidemo.entities.Vehicle;
+import br.com.rafaelbriet.springapidemo.mappers.VehicleMapper;
 import br.com.rafaelbriet.springapidemo.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,46 +11,55 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VehicleService {
 
     private final VehicleRepository repository;
+    private final VehicleMapper mapper;
 
-    public VehicleService(VehicleRepository repository) {
+    public VehicleService(VehicleRepository repository, VehicleMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Transactional(readOnly = true)
-    public List<Vehicle> findAll(String brand, String model, Integer year) {
-        return repository.findAll();
+    public List<VehicleResponseDTO> findAll(String brand, String model, Integer year) {
+        // A lógica de filtro avançado será adicionada aqui posteriormente.
+        return repository.findAll().stream()
+                .map(mapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Optional<Vehicle> findById(Long id) {
-        return repository.findById(id);
+    public Optional<VehicleResponseDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toResponseDTO);
     }
 
     @Transactional
-    public Vehicle create(Vehicle newVehicle) {
-        return repository.save(newVehicle);
+    public VehicleResponseDTO create(VehicleRequestDTO requestDTO) {
+        Vehicle vehicle = mapper.toEntity(requestDTO);
+        Vehicle savedVehicle = repository.save(vehicle);
+        return mapper.toResponseDTO(savedVehicle);
     }
 
     @Transactional
-    public Optional<Vehicle> update(Long id, Vehicle updatedVehicle) {
+    public Optional<VehicleResponseDTO> update(Long id, VehicleRequestDTO requestDTO) {
         return repository.findById(id)
                 .map(existingVehicle -> {
-                    existingVehicle.setModel(updatedVehicle.getModel());
-                    existingVehicle.setBrand(updatedVehicle.getBrand());
-                    existingVehicle.setYear(updatedVehicle.getYear());
-                    existingVehicle.setDescription(updatedVehicle.getDescription());
-                    existingVehicle.setSold(updatedVehicle.isSold());
-                    return repository.save(existingVehicle);
+                    existingVehicle.setModel(requestDTO.getModel());
+                    existingVehicle.setBrand(requestDTO.getBrand());
+                    existingVehicle.setYear(requestDTO.getYear());
+                    existingVehicle.setDescription(requestDTO.getDescription());
+                    existingVehicle.setSold(requestDTO.isSold());
+                    Vehicle updatedVehicle = repository.save(existingVehicle);
+                    return mapper.toResponseDTO(updatedVehicle);
                 });
     }
 
     @Transactional
-    public Optional<Vehicle> patch(Long id, Map<String, Object> updates) {
+    public Optional<VehicleResponseDTO> patch(Long id, Map<String, Object> updates) {
         return repository.findById(id)
                 .map(existingVehicle -> {
                     updates.forEach((key, value) -> {
@@ -69,7 +81,8 @@ public class VehicleService {
                                 break;
                         }
                     });
-                    return repository.save(existingVehicle);
+                    Vehicle patchedVehicle = repository.save(existingVehicle);
+                    return mapper.toResponseDTO(patchedVehicle);
                 });
     }
 
