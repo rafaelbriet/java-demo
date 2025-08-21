@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "c7a319ef-0693-462a-b261-05c8d60d9639",
+		"name": "Spring API Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11529819"
+	},
+	"item": [
+		{
+			"name": "getAllVehicles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos"
+					],
+					"query": [
+						{
+							"key": "marca",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "ano",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "cor",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleById",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUnsoldVehicleCount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/total-nao-vendidos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						"total-nao-vendidos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleDistributionByDecade",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/total-por-decada",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						"total-por-decada"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "model",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "year",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleDistributionByBrand",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/total-por-marca",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						"total-por-marca"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "model",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "year",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getRecentlyRegisteredVehicles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/recentes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						"recentes"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "model",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "year",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createVehicle",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"\",\r\n    \"brand\": \"\",\r\n    \"year\": 2000,\r\n    \"description\": \"description\",\r\n    \"sold\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/veiculos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateVehicle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"\",\r\n    \"brand\": \"\",\r\n    \"year\": 2000,\r\n    \"description\": \"description\",\r\n    \"sold\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patchVehicle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"\",\r\n    \"brand\": \"\",\r\n    \"year\": 2000,\r\n    \"description\": \"description\",\r\n    \"sold\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteVehicle",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/veiculos/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"veiculos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:5000"
+		}
+	]
+}
