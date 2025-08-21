@@ -1,5 +1,6 @@
 package br.com.rafaelbriet.springapidemo.services;
 
+import br.com.rafaelbriet.springapidemo.dtos.DecadeCount;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleRequestDTO;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleResponseDTO;
 import br.com.rafaelbriet.springapidemo.entities.Vehicle;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.LinkedHashMap; // For preserving order
 
 @Service
 public class VehicleService {
@@ -98,5 +100,18 @@ public class VehicleService {
     @Transactional(readOnly = true)
     public long countBySoldStatus(boolean sold) {
         return repository.countBySold(sold);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Long> getVehicleCountByDecade() {
+        List<DecadeCount> counts = repository.findVehicleCountByDecade();
+        // Using LinkedHashMap to preserve the order returned by the query
+        return counts.stream()
+                .collect(Collectors.toMap(
+                        decadeCount -> "Decade " + decadeCount.getDecade(),
+                        DecadeCount::getCount,
+                        (v1, v2) -> v1, // Merge function, not really needed here
+                        LinkedHashMap::new
+                ));
     }
 }

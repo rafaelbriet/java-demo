@@ -29,6 +29,13 @@ public class VehiclesController {
         return ResponseEntity.ok(Collections.singletonMap("unsoldCount", unsoldCount));
     }
 
+    // GET vehicle distribution by decade
+    @GetMapping("/total-por-decada")
+    public ResponseEntity<Map<String, Long>> getVehicleDistributionByDecade() {
+        Map<String, Long> distribution = service.getVehicleCountByDecade();
+        return ResponseEntity.ok(distribution);
+    }
+
     // GET all vehicles or filter by brand, model, year
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles(
