@@ -1,5 +1,6 @@
 package br.com.rafaelbriet.springapidemo.services;
 
+import br.com.rafaelbriet.springapidemo.dtos.BrandCount;
 import br.com.rafaelbriet.springapidemo.dtos.DecadeCount;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleRequestDTO;
 import br.com.rafaelbriet.springapidemo.dtos.VehicleResponseDTO;
@@ -9,11 +10,11 @@ import br.com.rafaelbriet.springapidemo.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap; // For preserving order
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.LinkedHashMap; // For preserving order
 
 @Service
 public class VehicleService {
@@ -111,6 +112,18 @@ public class VehicleService {
                         decadeCount -> "Decade " + decadeCount.getDecade(),
                         DecadeCount::getCount,
                         (v1, v2) -> v1, // Merge function, not really needed here
+                        LinkedHashMap::new
+                ));
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Long> getVehicleCountByBrand() {
+        List<BrandCount> counts = repository.findVehicleCountByBrand();
+        return counts.stream()
+                .collect(Collectors.toMap(
+                        BrandCount::getBrand,
+                        BrandCount::getCount,
+                        (v1, v2) -> v1,
                         LinkedHashMap::new
                 ));
     }

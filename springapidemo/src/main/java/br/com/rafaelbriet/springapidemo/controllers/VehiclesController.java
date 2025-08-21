@@ -36,6 +36,13 @@ public class VehiclesController {
         return ResponseEntity.ok(distribution);
     }
 
+    // GET vehicle distribution by brand
+    @GetMapping("/total-por-marca")
+    public ResponseEntity<Map<String, Long>> getVehicleDistributionByBrand() {
+        Map<String, Long> distribution = service.getVehicleCountByBrand();
+        return ResponseEntity.ok(distribution);
+    }
+
     // GET all vehicles or filter by brand, model, year
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles(
